@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lostromos
+  namespace: lostromos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lostromos
+  template:
+    metadata:
+      labels:
+        app: lostromos
+    spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: lostromos-reader
+      containers:
+        - name: exporter
+          image: CONTAINER_IMAGE
+          ports:
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
