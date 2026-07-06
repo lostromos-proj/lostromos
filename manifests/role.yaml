@@ -5,6 +5,14 @@ metadata:
   name: lostromos-reader
 rules:
   - apiGroups:
+      - templates.gatekeeper.sh
+    resources:
+      - constrainttemplates
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
       - constraints.gatekeeper.sh
     resources:
       - "*"

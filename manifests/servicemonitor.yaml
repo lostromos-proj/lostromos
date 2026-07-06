@@ -7,9 +7,6 @@ metadata:
   labels:
     app: lostromos
 spec:
-  namespaceSelector:
-    matchNames:
-      - lostromos
   selector:
     matchLabels:
       app: lostromos
