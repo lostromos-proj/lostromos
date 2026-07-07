@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"log/slog"
 	"net/http"
 	"os"
@@ -14,7 +15,24 @@ import (
 	"github.com/lostromos-proj/lostromos/config"
 	"github.com/lostromos-proj/lostromos/input/constraint"
 	"github.com/lostromos-proj/lostromos/metrics"
+	"k8s.io/klog/v2"
 )
+
+// Build-time toggle for client-go/klog INFO traces.
+const enableClientGoTraceLogs = false
+
+func configureKlogOutput() {
+	if enableClientGoTraceLogs {
+		klog.LogToStderr(true)
+		return
+	}
+
+	// Keep WARNING/ERROR on stderr, discard INFO traces such as Reflector ListAndWatch.
+	klog.LogToStderr(false)
+	klog.SetOutputBySeverity("INFO", io.Discard)
+	klog.SetOutputBySeverity("WARNING", os.Stderr)
+	klog.SetOutputBySeverity("ERROR", os.Stderr)
+}
 
 func main() {
 	cfg, err := config.Load()
@@ -22,6 +40,8 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+
+	configureKlogOutput()
 
 	level := slog.LevelWarn
 	if cfg.Verbose {
