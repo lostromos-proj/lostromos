@@ -52,8 +52,4 @@ Each update message carries the full label set that identifies the gauge instanc
 
 When `active` is `true`, the metrics handler sets the gauge for that label combination to `1`, creating it if it does not exist. When `active` is `false`, the gauge for that label combination is deleted.
 
-Inputs are responsible for sending a `false` update when they observe that a previously-reported violation is no longer present. The GC mechanism below provides a safety net for cases where a removal event is never observed.
-
-## State Table GC
-
-The state table that backs the violation gauge is periodically garbage-collected. Entries older than [`--metrics-gc-interval`](command.md) (default `1h`) are removed and their corresponding gauge series are unregistered. This bounds memory growth when violations are resolved without an explicit removal event being observed.
+Inputs are responsible for sending a `false` update when they observe that a previously-reported violation is no longer present.

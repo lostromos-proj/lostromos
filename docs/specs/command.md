@@ -43,7 +43,6 @@ Boolean flags additionally support bare form, which implies `true`:
 | `--metrics-host` | `0.0.0.0` | Interface to bind for the metrics HTTP endpoint |
 | `--metrics-port` | `9090` | Port to bind for the metrics HTTP endpoint |
 | `--metrics-path` | `/metrics` | URL path for serving metrics |
-| `--metrics-gc-interval` | `1h` | How long before removing old entries from the state table; accepts Go duration strings (e.g. `30m`, `2h`) |
 | `--help` | — | Print flag and environment variable information, including defaults, then exit immediately |
 
 ## Environment Variables
@@ -58,7 +57,6 @@ Each flag has an equivalent environment variable. The name is derived by replaci
 | `METRICS_HOST` | `--metrics-host` |
 | `METRICS_PORT` | `--metrics-port` |
 | `METRICS_PATH` | `--metrics-path` |
-| `METRICS_GC_INTERVAL` | `--metrics-gc-interval` |
 
 ## Precedence
 
@@ -78,9 +76,9 @@ Use a local kubeconfig and enable verbose logging:
 lostromos --kubeconfig=$HOME/.kube/config --verbose
 ```
 
-Override metrics endpoint and GC interval via environment:
+Override metrics endpoint via environment:
 ```sh
-METRICS_PORT=8080 METRICS_GC_INTERVAL=30m lostromos
+METRICS_PORT=8080 lostromos
 ```
 
 Flag takes precedence over environment variable:

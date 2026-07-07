@@ -50,7 +50,7 @@ func main() {
 	}
 
 	handler := metrics.NewHandler()
-	go handler.Run(ctx, cfg.MetricsGCInterval)
+	go handler.Run(ctx)
 
 	addr := fmt.Sprintf("%s:%d", cfg.MetricsHost, cfg.MetricsPort)
 	metricsMux := http.NewServeMux()

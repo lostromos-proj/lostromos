@@ -4,7 +4,6 @@ package config
 
 import (
 	"flag"
-	"time"
 )
 
 // Config holds all runtime configuration for lostromos.
@@ -15,7 +14,6 @@ type Config struct {
 	MetricsHost            string
 	MetricsPort            int
 	MetricsPath            string
-	MetricsGCInterval      time.Duration
 }
 
 // newFlagSet returns a FlagSet with all flags bound to cfg's fields.
@@ -28,7 +26,6 @@ func newFlagSet(cfg *Config) *flag.FlagSet {
 	fs.StringVar(&cfg.MetricsHost, "metrics-host", strEnv("METRICS_HOST", DefaultMetricsHost), "Interface to bind for the metrics HTTP endpoint")
 	fs.IntVar(&cfg.MetricsPort, "metrics-port", intEnv("METRICS_PORT", DefaultMetricsPort), "Port to bind for the metrics HTTP endpoint")
 	fs.StringVar(&cfg.MetricsPath, "metrics-path", strEnv("METRICS_PATH", DefaultMetricsPath), "URL path for serving metrics")
-	fs.DurationVar(&cfg.MetricsGCInterval, "metrics-gc-interval", durationEnv("METRICS_GC_INTERVAL", DefaultMetricsGCInterval), "How long before removing old entries from the state table")
 	return fs
 }
 
@@ -40,6 +37,5 @@ var helpEntries = []struct{ flag, env, def, desc string }{
 	{"--metrics-host", "METRICS_HOST", DefaultMetricsHost, "Interface to bind for the metrics HTTP endpoint"},
 	{"--metrics-port", "METRICS_PORT", "9090", "Port to bind for the metrics HTTP endpoint"},
 	{"--metrics-path", "METRICS_PATH", DefaultMetricsPath, "URL path for serving metrics"},
-	{"--metrics-gc-interval", "METRICS_GC_INTERVAL", "1h", "How long before removing old entries from the state table"},
 	{"--help", "", "", "Print this help message and exit"},
 }

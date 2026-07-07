@@ -9,14 +9,12 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 const (
-	DefaultMetricsHost       = "0.0.0.0"
-	DefaultMetricsPort       = 9090
-	DefaultMetricsPath       = "/metrics"
-	DefaultMetricsGCInterval = 1 * time.Hour
+	DefaultMetricsHost = "0.0.0.0"
+	DefaultMetricsPort = 9090
+	DefaultMetricsPath = "/metrics"
 )
 
 // Load parses configuration from command-line flags and environment variables.
@@ -41,9 +39,6 @@ func Load() (Config, error) {
 	}
 	if !strings.HasPrefix(cfg.MetricsPath, "/") {
 		return Config{}, fmt.Errorf("--metrics-path must start with /, got %q", cfg.MetricsPath)
-	}
-	if cfg.MetricsGCInterval <= 0 {
-		return Config{}, fmt.Errorf("--metrics-gc-interval must be > 0, got %v", cfg.MetricsGCInterval)
 	}
 
 	return cfg, nil
@@ -85,14 +80,3 @@ func intEnv(key string, defaultVal int) int {
 	return n
 }
 
-func durationEnv(key string, defaultVal time.Duration) time.Duration {
-	v := strings.TrimSpace(os.Getenv(key))
-	if v == "" {
-		return defaultVal
-	}
-	d, err := time.ParseDuration(v)
-	if err != nil {
-		return defaultVal
-	}
-	return d
-}

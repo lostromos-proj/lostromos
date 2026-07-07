@@ -277,6 +277,10 @@ func (r *Runner) runKindInformer(ctx context.Context, kind string, ks *kindState
 		return fmt.Errorf("%s cache sync timed out (CRD may not be available yet)", kind)
 	}
 
+	// Perform an explicit initial reconciliation from the informer cache so
+	// restarts repopulate metrics even before any new watch event arrives.
+	r.initialReconcile(ks, inf)
+
 	slog.Debug("constraint kind watch established", "kind", kind)
 
 	select {
@@ -285,6 +289,12 @@ func (r *Runner) runKindInformer(ctx context.Context, kind string, ks *kindState
 	}
 	close(stop)
 	return nil
+}
+
+func (r *Runner) initialReconcile(ks *kindState, inf cache.SharedIndexInformer) {
+	for _, obj := range inf.GetStore().List() {
+		r.onConstraintChange(ks, obj)
+	}
 }
 
 func (r *Runner) onConstraintChange(ks *kindState, obj any) {
